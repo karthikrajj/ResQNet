@@ -47,10 +47,9 @@ const CitizenDashboard = () => {
   const handleSOS = async (e) => {
     e.preventDefault();
     
-    // Function to process SOS with given coordinates
-    const processSOS = async (lat, lng, address) => {
+    const processSOS = async (lat, lng, addressString) => {
       try {
-        const location = { lat, lng, address };
+        const location = { lat, lng, address: addressString };
         await axios.post('/api/citizen/sos', { type: sosType, description: sosDescription, location, priority: 'High' }, {
           headers: { Authorization: `Bearer ${user.token}` }
         });
@@ -63,23 +62,41 @@ const CitizenDashboard = () => {
       }
     };
 
-    // Try to get real physical location
     if (navigator.geolocation) {
       toast.info('Acquiring live GPS satellite lock...', { autoClose: 2000 });
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          processSOS(position.coords.latitude, position.coords.longitude, 'Live GPS Coordinates');
+        async (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          
+          let locationName = 'Unknown Sector';
+          try {
+            // Reverse Geocoding to get physical address
+            const res = await axios.get(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+            if (res.data && res.data.display_name) {
+              // Extract a shorter version of the address (first two components usually city/neighborhood)
+              const parts = res.data.display_name.split(',');
+              locationName = parts.slice(0, 2).join(',').trim();
+            }
+          } catch (err) {
+            console.warn('Reverse geocoding failed', err);
+          }
+
+          const tacticalAddress = `${locationName} [LAT: ${lat.toFixed(4)}, LNG: ${lng.toFixed(4)}]`;
+          processSOS(lat, lng, tacticalAddress);
         },
         (error) => {
           console.warn('Geolocation blocked or failed. Using tactical fallback coordinates.', error);
-          // Fallback to random tactical coordinates if user denies location
-          processSOS(37.77 + (Math.random() - 0.5)*0.1, -122.41 + (Math.random() - 0.5)*0.1, 'Tactical Fallback Coordinates');
+          const fLat = 37.77 + (Math.random() - 0.5)*0.1;
+          const fLng = -122.41 + (Math.random() - 0.5)*0.1;
+          processSOS(fLat, fLng, `Tactical Fallback [LAT: ${fLat.toFixed(4)}, LNG: ${fLng.toFixed(4)}]`);
         },
-        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
       );
     } else {
-      // Fallback if browser doesn't support geolocation
-      processSOS(37.77 + (Math.random() - 0.5)*0.1, -122.41 + (Math.random() - 0.5)*0.1, 'Tactical Fallback Coordinates');
+      const fLat = 37.77 + (Math.random() - 0.5)*0.1;
+      const fLng = -122.41 + (Math.random() - 0.5)*0.1;
+      processSOS(fLat, fLng, `Tactical Fallback [LAT: ${fLat.toFixed(4)}, LNG: ${fLng.toFixed(4)}]`);
     }
   };
 
