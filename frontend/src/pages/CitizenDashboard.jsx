@@ -283,8 +283,8 @@ const CitizenDashboard = () => {
                         <div className="mt-4 bg-black/50 border border-white/5 rounded-xl p-3 max-w-sm">
                           <p className="text-xs text-slate-400 mb-2 font-semibold flex items-center gap-1"><MessageSquare className="w-3 h-3"/> Secure Comms</p>
                           <div className="space-y-2 max-h-32 overflow-y-auto mb-2">
-                            {req.messages.map((m, i) => (
-                              <div key={i} className={`text-sm p-2 rounded-lg ${m.sender==='Citizen' ? 'bg-blue-500/20 text-blue-100 ml-auto w-fit' : 'bg-white/10 text-slate-200 mr-auto w-fit'}`}>
+                            {req.messages.map((m, idx) => (
+                              <div key={idx} className={`text-sm p-2 rounded-lg ${m.sender==='Citizen' ? 'bg-emerald-500/20 text-emerald-100 ml-auto w-fit' : 'bg-white/10 text-slate-200 mr-auto w-fit'}`}>
                                 <span className="text-[10px] opacity-50 block mb-0.5">{m.sender}</span>
                                 {m.text}
                               </div>
@@ -299,7 +299,7 @@ const CitizenDashboard = () => {
                     </div>
                     {req.volunteer && (
                       <div className="bg-blue-900/20 p-4 rounded-xl border border-blue-500/20 text-sm text-center sm:text-right min-w-[150px] h-fit">
-                        <p className="text-[10px] uppercase font-bold tracking-wider text-blue-400 mb-1">Dispatched Unit</p>
+                        <p className="text-[10px] uppercase font-bold tracking-wider text-blue-400 mb-1">Dispatched Responder</p>
                         <p className="font-semibold text-white">{req.volunteer.name}</p>
                         <p className="text-slate-400 font-mono mt-1 text-xs">{req.volunteer.phone}</p>
                       </div>

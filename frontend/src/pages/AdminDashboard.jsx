@@ -58,8 +58,8 @@ const AdminDashboard = () => {
 
       <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Global <span className="text-emerald-400">Command</span></h1>
-          <p className="text-slate-400 text-sm mt-1">Admin Overwatch Terminal</p>
+          <h1 className="text-3xl font-extrabold text-white tracking-tight">Police <span className="text-emerald-400">Central Command</span></h1>
+          <p className="text-slate-400 text-sm mt-1">Law Enforcement Overwatch Terminal</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-2 rounded-xl text-sm font-semibold shadow-[0_0_15px_-3px_rgba(16,185,129,0.3)]">
@@ -84,7 +84,7 @@ const AdminDashboard = () => {
         <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-all hover:scale-105 hover:shadow-[0_0_25px_-5px_rgba(168,85,247,0.3)] hover:border-purple-500/30 animate-fade-in-up group" style={{ animationDelay: '200ms' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1 group-hover:text-purple-300 transition-colors">Active Units</p>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1 group-hover:text-purple-300 transition-colors">Active Responder Units</p>
               <p className="text-4xl font-light text-purple-400 font-mono">{stats.summary.totalVolunteers}</p>
             </div>
             <div className="p-4 bg-purple-500/10 rounded-2xl border border-purple-500/20 text-purple-400"><Target className="w-6 h-6 group-hover:animate-pulse-glow" /></div>
@@ -117,7 +117,7 @@ const AdminDashboard = () => {
         <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 lg:col-span-1 flex flex-col hover:border-blue-500/30 transition-all hover:shadow-[0_0_30px_-5px_rgba(59,130,246,0.2)]">
           <h2 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
             <Activity className="w-5 h-5 text-blue-400" />
-            Global Resolution Matrix
+            Jurisdiction Resolution Matrix
           </h2>
           <div className="flex-1 flex items-center justify-center min-h-[250px]">
             <Pie data={pieData} options={{ maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } } } }} />

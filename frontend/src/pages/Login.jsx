@@ -70,14 +70,17 @@ const Login = () => {
           </div>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="bg-red-500/10 border-l-4 border-red-500 p-4 rounded-r-md">
+            <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 flex items-center gap-2">
+              <AlertCircle className="w-5 h-5 text-red-400" />
               <p className="text-sm text-red-400">{error}</p>
             </div>
           )}
           
           <div className="space-y-4">
+
+
             <div>
               <label htmlFor="email-address" className="sr-only">Email address</label>
               <input

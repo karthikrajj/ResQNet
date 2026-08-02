@@ -25,7 +25,7 @@ const LandingPage = () => {
           
           <div className="inline-block overflow-hidden whitespace-nowrap border-r-2 border-white/50 pr-2 animate-typewriter mb-12 max-w-2xl mx-auto">
             <p className="text-lg md:text-xl text-slate-400 leading-relaxed font-mono">
-              A centralized, AI-ready platform connecting citizens in distress.
+              A centralized, AI-ready platform connecting citizens with Police and Fireforce.
             </p>
           </div>
           

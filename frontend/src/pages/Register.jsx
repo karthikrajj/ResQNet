@@ -134,8 +134,9 @@ const Register = () => {
                 onChange={handleChange}
                 className="relative block w-full rounded-xl border-0 py-3 px-4 bg-white/5 text-white ring-1 ring-inset ring-white/10 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm sm:leading-6 transition-all [&>option]:bg-slate-900 [&>option]:text-white"
               >
-                <option value="Citizen">Citizen (Distress Node)</option>
-                <option value="Volunteer">Volunteer (Response Unit)</option>
+                <option value="Citizen" className="bg-slate-900">Citizen (Requires Assistance)</option>
+                <option value="Volunteer" className="bg-slate-900">First Responder Unit (Fire/Med)</option>
+                <option value="Admin" className="bg-slate-900">Police Dispatch (Command)</option>
               </select>
             </div>
           </div>

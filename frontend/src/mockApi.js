@@ -5,8 +5,29 @@ const getInitialRequests = () => {
   if (saved) return JSON.parse(saved);
   
   const initial = [
-    { _id: 'r1', type: 'Medical', location: { address: 'COORDS: 37.77, -122.41', lat: 37.7749, lng: -122.4194 }, description: 'Need immediate medical assistance', status: 'Pending', priority: 'High', citizen: { name: 'Alice', phone: '555-0101' }, messages: [], createdAt: new Date().toISOString() },
-    { _id: 'r2', type: 'Rescue', location: { address: 'COORDS: 37.80, -122.42', lat: 37.8044, lng: -122.4221 }, description: 'Flood rescue required', status: 'Assigned', priority: 'Critical', citizen: { name: 'Bob', phone: '555-0202' }, volunteer: { name: 'Demo Volunteer', phone: '555-0303' }, messages: [{ sender: 'Volunteer', text: 'Im en route. Stay put.' }], createdAt: new Date(Date.now() - 3600000).toISOString() }
+    { 
+      _id: 'REQ-1', 
+      citizenId: 'CIT-123', 
+      type: 'Medical', 
+      description: 'Severe trauma reported. Need immediate medevac.', 
+      location: { lat: 37.7749, lng: -122.4194, address: 'Sector 4 - Downtown' },
+      status: 'Pending',
+      createdAt: new Date().toISOString()
+    },
+    { 
+      _id: 'REQ-2', 
+      citizenId: 'CIT-456', 
+      type: 'Rescue', 
+      description: 'Trapped in flooded building. Water rising.', 
+      location: { lat: 37.7849, lng: -122.4094, address: 'Sector 2 - Riverside' },
+      status: 'In Progress', 
+      volunteer: { name: 'Fire Battalion 7', phone: 'DISPATCH-FREQ-44.1' },
+      messages: [
+        { sender: 'Citizen', text: 'Water is up to the second floor!' },
+        { sender: 'First Responder Unit', text: 'Hold tight. Aerial rescue inbound in 2 mikes.' }
+      ],
+      createdAt: new Date(Date.now() - 3600000).toISOString()
+    }
   ];
   localStorage.setItem('resqnet_requests', JSON.stringify(initial));
   return initial;

@@ -53,11 +53,11 @@ const Navbar = () => {
             ) : (
               <div className="flex items-center gap-4">
                 <Link to="/login" className="text-slate-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                  Command Login
+                  Central Dispatch Login
                 </Link>
                 <Link to="/register" className="relative overflow-hidden bg-white/10 hover:bg-white/20 border border-white/10 text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-sm transition-all hover:scale-105 hover:shadow-[0_0_20px_-5px_rgba(255,255,255,0.4)]">
                   <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent w-[200%]"></div>
-                  <span className="relative z-10">Deploy Unit</span>
+                  <span className="relative z-10">Citizen SOS</span>
                 </Link>
               </div>
             )}

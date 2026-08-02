@@ -71,7 +71,7 @@ const VolunteerDashboard = () => {
     const msg = chatMsg[reqId];
     if(!msg) return;
     try {
-      await axios.post(`/api/requests/${reqId}/chat`, { sender: 'Volunteer Unit', text: msg }, { headers: { Authorization: `Bearer ${user.token}` } });
+      await axios.post(`/api/requests/${reqId}/chat`, { sender: 'First Responder Unit', text: msg }, { headers: { Authorization: `Bearer ${user.token}` } });
       setChatMsg(prev => ({ ...prev, [reqId]: '' }));
       fetchData();
     } catch (e) {
@@ -83,8 +83,8 @@ const VolunteerDashboard = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in-up">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Response <span className="text-purple-400">Unit</span></h1>
-          <p className="text-slate-400 text-sm mt-1">Operational Command Terminal</p>
+          <h1 className="text-3xl font-extrabold text-white tracking-tight">First <span className="text-purple-400">Responder Unit</span></h1>
+          <p className="text-slate-400 text-sm mt-1">Operational Dispatch Terminal</p>
         </div>
         
         <div className="flex items-center gap-3">
@@ -149,7 +149,7 @@ const VolunteerDashboard = () => {
                       <p className="text-xs text-slate-400 mb-2 font-semibold flex items-center gap-1"><MessageSquare className="w-3 h-3"/> Secure Comms Link</p>
                       <div className="space-y-2 max-h-32 overflow-y-auto mb-2">
                         {task.messages.map((m, idx) => (
-                          <div key={idx} className={`text-sm p-2 rounded-lg ${m.sender==='Volunteer Unit' ? 'bg-purple-500/20 text-purple-100 ml-auto w-fit' : 'bg-white/10 text-slate-200 mr-auto w-fit'}`}>
+                          <div key={idx} className={`text-sm p-2 rounded-lg ${m.sender==='First Responder Unit' ? 'bg-purple-500/20 text-purple-100 ml-auto w-fit' : 'bg-white/10 text-slate-200 mr-auto w-fit'}`}>
                             <span className="text-[10px] opacity-50 block mb-0.5">{m.sender}</span>
                             {m.text}
                           </div>
