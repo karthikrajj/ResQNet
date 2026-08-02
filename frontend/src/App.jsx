@@ -10,8 +10,13 @@ import VolunteerDashboard from './pages/VolunteerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import Navbar from './components/Navbar';
 
+import { setupMockAdapter } from './mockApi';
+
 // Real Backend URL will be set here dynamically
 axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'https://backend-5o9504zgw-hawkeye2.vercel.app';
+
+// Setup Mock Adapter for Vercel Demo
+setupMockAdapter();
 
 const PrivateRoute = ({ children, roles }) => {
   const { user, loading } = useContext(AuthContext);
