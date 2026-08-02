@@ -87,8 +87,8 @@ const VolunteerDashboard = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              {myTasks.map(task => (
-                <div key={task._id} className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-purple-500/30 transition-all">
+              {myTasks.map((task, i) => (
+                <div key={task._id} className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-purple-500/30 transition-all animate-slide-in-right" style={{ animationDelay: `${i * 100}ms` }}>
                   <div className="flex justify-between items-start mb-4">
                     <span className="bg-purple-500/20 text-purple-300 border border-purple-500/30 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">{task.type}</span>
                     <span className="text-xs text-slate-400 font-mono bg-black/40 px-2 py-1 rounded">STATUS: {task.status}</span>
@@ -139,9 +139,10 @@ const VolunteerDashboard = () => {
               No distress signals detected in your sector.
             </div>
           ) : (
-            <div className="space-y-4">
-              {pendingRequests.map(req => (
-                <div key={req._id} className="bg-red-500/5 backdrop-blur-md p-6 rounded-2xl border border-red-500/20 relative overflow-hidden group">
+            <div className="space-y-4 relative overflow-hidden rounded-2xl">
+              <div className="absolute inset-0 w-full h-[50px] bg-gradient-to-b from-transparent via-red-500/10 to-transparent pointer-events-none animate-scanline z-50 blur-sm"></div>
+              {pendingRequests.map((req, i) => (
+                <div key={req._id} className="bg-red-500/5 backdrop-blur-md p-6 rounded-2xl border border-red-500/20 relative overflow-hidden group animate-slide-in-right" style={{ animationDelay: `${i * 100}ms` }}>
                   <div className="absolute top-0 right-0 w-24 h-24 bg-red-500/10 rounded-full blur-2xl -mr-8 -mt-8 group-hover:bg-red-500/20 transition-all"></div>
                   
                   <div className="flex justify-between items-start mb-3 relative z-10">
@@ -160,7 +161,7 @@ const VolunteerDashboard = () => {
                   
                   <button 
                     onClick={() => handleAccept(req._id)}
-                    className="mt-6 w-full bg-red-600/90 text-white py-3 rounded-xl font-bold text-sm hover:bg-red-500 shadow-[0_0_15px_-3px_rgba(220,38,38,0.4)] transition-all relative z-10"
+                    className="mt-6 w-full bg-red-600/90 text-white py-3 rounded-xl font-bold text-sm hover:bg-red-500 shadow-[0_0_15px_-3px_rgba(220,38,38,0.4)] transition-all relative z-10 animate-pulse-glow"
                   >
                     INTERCEPT & RESPOND
                   </button>

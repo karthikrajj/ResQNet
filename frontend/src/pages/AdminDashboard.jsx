@@ -68,17 +68,17 @@ const AdminDashboard = () => {
 
       {/* Telemetry Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors animate-fade-in-up" style={{ animationDelay: '100ms' }}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Critical Incidents</p>
               <p className="text-4xl font-light text-red-400 font-mono">{stats.summary.activeEmergencies}</p>
             </div>
-            <div className="p-4 bg-red-500/10 rounded-2xl border border-red-500/20 text-red-400"><AlertTriangle className="w-6 h-6" /></div>
+            <div className="p-4 bg-red-500/10 rounded-2xl border border-red-500/20 text-red-400"><AlertTriangle className="w-6 h-6 animate-pulse" /></div>
           </div>
         </div>
         
-        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors animate-fade-in-up" style={{ animationDelay: '200ms' }}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Active Units</p>
@@ -88,7 +88,7 @@ const AdminDashboard = () => {
           </div>
         </div>
         
-        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors animate-fade-in-up" style={{ animationDelay: '300ms' }}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Civilian Nodes</p>
@@ -98,7 +98,7 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors animate-fade-in-up" style={{ animationDelay: '400ms' }}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Secure Havens</p>
@@ -138,8 +138,8 @@ const AdminDashboard = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
-                {volunteers.map(vol => (
-                  <tr key={vol._id} className="hover:bg-white/5 transition-colors">
+                {volunteers.map((vol, i) => (
+                  <tr key={vol._id} className="hover:bg-white/5 transition-colors animate-slide-in-right" style={{ animationDelay: `${i * 100}ms` }}>
                     <td className="px-4 py-4 whitespace-nowrap">
                       <div className="font-semibold text-white">{vol.name}</div>
                       <div className="text-xs text-slate-400 font-mono">{vol.email}</div>

@@ -69,12 +69,12 @@ const CitizenDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* Tactical SOS Panel */}
-        <div className="lg:col-span-1 space-y-6">
-          <div className="bg-red-500/5 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-red-500/20 relative overflow-hidden group">
+        <div className="lg:col-span-1 space-y-6 animate-float">
+          <div className="bg-red-500/5 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-red-500/20 relative overflow-hidden group hover:border-red-500/40 transition-colors">
             <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-red-500/20 transition-all"></div>
             
             <h2 className="text-xl font-semibold text-red-400 flex items-center gap-2 mb-6 relative z-10">
-              <AlertCircle className="h-6 w-6 animate-pulse" />
+              <AlertCircle className="h-6 w-6 animate-pulse-glow" />
               Emergency Broadcast
             </h2>
             
@@ -110,7 +110,7 @@ const CitizenDashboard = () => {
               </div>
               <button 
                 type="submit"
-                className="w-full bg-red-600/90 text-white py-3.5 px-4 rounded-xl font-bold text-sm tracking-wide hover:bg-red-500 shadow-[0_0_20px_-5px_rgba(220,38,38,0.5)] hover:shadow-[0_0_30px_-5px_rgba(220,38,38,0.7)] transition-all flex justify-center items-center gap-2 group"
+                className="w-full bg-red-600/90 text-white py-3.5 px-4 rounded-xl font-bold text-sm tracking-wide hover:bg-red-500 shadow-[0_0_20px_-5px_rgba(220,38,38,0.5)] hover:shadow-[0_0_30px_-5px_rgba(220,38,38,0.7)] transition-all flex justify-center items-center gap-2 group animate-pulse-glow"
               >
                 <AlertCircle className="w-5 h-5 group-hover:scale-110 transition-transform" /> INITIATE SOS
               </button>
@@ -153,8 +153,8 @@ const CitizenDashboard = () => {
               </div>
             ) : (
               <div className="space-y-4">
-                {requests.map(req => (
-                  <div key={req._id} className="p-5 border border-white/10 rounded-xl bg-black/40 flex flex-col sm:flex-row sm:items-center justify-between gap-6 hover:bg-white/5 transition-colors">
+                {requests.map((req, i) => (
+                  <div key={req._id} className="p-5 border border-white/10 rounded-xl bg-black/40 flex flex-col sm:flex-row sm:items-center justify-between gap-6 hover:bg-white/5 transition-colors animate-slide-in-right" style={{ animationDelay: `${i * 100}ms` }}>
                     <div>
                       <div className="flex items-center gap-3 mb-2">
                         <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider
