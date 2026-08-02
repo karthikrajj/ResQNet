@@ -16,6 +16,29 @@
   --animate-heartbeat: heartbeat 1.5s ease-in-out infinite;
   --animate-glitch: glitch 3s infinite;
   --animate-pan: pan 20s linear infinite;
+  --animate-radar-spin: radarSpin 4s linear infinite;
+  --animate-gradient-x: gradientX 15s ease infinite;
+  --animate-typewriter: typewriter 2s steps(40) forwards;
+  --animate-ping-slow: pingSlow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes radarSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes gradientX {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes pingSlow {
+  75%, 100% { transform: scale(2); opacity: 0; }
 }
 
 @keyframes blob {

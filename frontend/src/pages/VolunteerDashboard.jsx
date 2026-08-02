@@ -140,7 +140,8 @@ const VolunteerDashboard = () => {
             </div>
           ) : (
             <div className="space-y-4 relative overflow-hidden rounded-2xl">
-              <div className="absolute inset-0 w-full h-[50px] bg-gradient-to-b from-transparent via-red-500/10 to-transparent pointer-events-none animate-scanline z-50 blur-sm"></div>
+              <div className="absolute inset-0 w-[200%] h-[200%] -top-[50%] -left-[50%] bg-[conic-gradient(from_0deg,transparent_0_340deg,rgba(220,38,38,0.3)_360deg)] pointer-events-none animate-radar-spin z-50 rounded-full"></div>
+              <div className="absolute inset-0 w-full h-[50px] bg-gradient-to-b from-transparent via-red-500/10 to-transparent pointer-events-none animate-scanline z-40 blur-sm"></div>
               {pendingRequests.map((req, i) => (
                 <div key={req._id} className="bg-red-500/5 backdrop-blur-md p-6 rounded-2xl border border-red-500/20 relative overflow-hidden group animate-slide-in-right" style={{ animationDelay: `${i * 100}ms` }}>
                   <div className="absolute top-0 right-0 w-24 h-24 bg-red-500/10 rounded-full blur-2xl -mr-8 -mt-8 group-hover:bg-red-500/20 transition-all"></div>
