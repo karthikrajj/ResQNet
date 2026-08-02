@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { ShieldAlert, LogOut, User as UserIcon } from 'lucide-react';
+import { ShieldAlert, LogOut } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -23,38 +23,40 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-md border-b border-gray-200">
+    <nav className="sticky top-0 z-50 bg-[#0a0f1c]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex justify-between h-20">
           <div className="flex">
-            <Link to={getDashboardLink()} className="flex-shrink-0 flex items-center gap-2">
-              <ShieldAlert className="h-8 w-8 text-primary" />
-              <span className="font-bold text-xl tracking-tight text-gray-900">ResQ<span className="text-secondary">Net</span></span>
+            <Link to={getDashboardLink()} className="flex-shrink-0 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <ShieldAlert className="h-5 w-5 text-white" />
+              </div>
+              <span className="font-extrabold text-2xl tracking-tight text-white">ResQ<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Net</span></span>
             </Link>
           </div>
           
           <div className="flex items-center">
             {user ? (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-6">
                 <div className="flex flex-col items-end hidden md:flex">
-                  <span className="text-sm font-medium text-gray-900">{user.name}</span>
-                  <span className="text-xs text-gray-500">{user.role}</span>
+                  <span className="text-sm font-semibold text-slate-200">{user.name}</span>
+                  <span className="text-xs text-blue-400 bg-blue-400/10 px-2 py-0.5 rounded-full mt-1">{user.role}</span>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+                  className="p-2.5 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all border border-transparent hover:border-red-500/20"
                   title="Logout"
                 >
                   <LogOut className="h-5 w-5" />
                 </button>
               </div>
             ) : (
-              <div className="flex gap-4">
-                <Link to="/login" className="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                  Login
+              <div className="flex items-center gap-4">
+                <Link to="/login" className="text-slate-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                  Command Login
                 </Link>
-                <Link to="/register" className="bg-primary text-white hover:bg-primary-dark px-4 py-2 rounded-md text-sm font-medium shadow-sm transition-colors">
-                  Sign up
+                <Link to="/register" className="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-sm transition-all hover:scale-105">
+                  Deploy Unit
                 </Link>
               </div>
             )}

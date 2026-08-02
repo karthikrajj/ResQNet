@@ -30,7 +30,6 @@ const Login = () => {
     }
   };
 
-  // Helper buttons for testing dummy data
   const fillCredentials = (role) => {
     if (role === 'citizen') { setEmail('citizen@resqnet.com'); setPassword('password123'); }
     if (role === 'volunteer') { setEmail('volunteer@resqnet.com'); setPassword('password123'); }
@@ -38,41 +37,47 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-64px)] items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
-      <div className="w-full max-w-md space-y-8 bg-white p-10 rounded-xl shadow-lg border border-gray-100">
+    <div className="flex relative min-h-[calc(100vh-80px)] items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#0a0f1c] overflow-hidden">
+      {/* Background blobs for Login */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[20%] left-[20%] w-[40vw] h-[40vw] rounded-full bg-blue-600/10 blur-[120px] animate-blob"></div>
+        <div className="absolute bottom-[20%] right-[20%] w-[35vw] h-[35vw] rounded-full bg-purple-600/10 blur-[100px] animate-blob" style={{ animationDelay: '2s' }}></div>
+      </div>
+
+      <div className="relative z-10 w-full max-w-md space-y-8 bg-white/5 p-10 rounded-2xl shadow-2xl backdrop-blur-xl border border-white/10">
         <div>
-          <div className="mx-auto flex justify-center text-primary">
+          <div className="mx-auto flex justify-center text-blue-400">
             <ShieldAlert className="h-12 w-12" />
           </div>
-          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-            Sign in to your account
+          <h2 className="mt-6 text-center text-3xl font-extrabold tracking-tight text-white">
+            Command Center Access
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-slate-400">
             Or{' '}
-            <Link to="/register" className="font-medium text-primary hover:text-primary-dark">
-              create a new account
+            <Link to="/register" className="font-medium text-blue-400 hover:text-blue-300 transition-colors">
+              deploy a new unit
             </Link>
           </p>
         </div>
         
         {/* Quick Test Links */}
-        <div className="bg-blue-50 p-4 rounded-md text-sm border border-blue-100">
-          <p className="font-semibold text-blue-800 mb-2">Demo Accounts:</p>
+        <div className="bg-blue-900/20 p-4 rounded-xl border border-blue-500/20">
+          <p className="font-medium text-blue-300 text-xs mb-3 uppercase tracking-wider text-center">Demo Protocols:</p>
           <div className="flex gap-2 justify-center">
-            <button onClick={() => fillCredentials('citizen')} type="button" className="text-xs bg-white border border-blue-200 px-2 py-1 rounded text-blue-700 hover:bg-blue-100">Citizen</button>
-            <button onClick={() => fillCredentials('volunteer')} type="button" className="text-xs bg-white border border-blue-200 px-2 py-1 rounded text-blue-700 hover:bg-blue-100">Volunteer</button>
-            <button onClick={() => fillCredentials('admin')} type="button" className="text-xs bg-white border border-blue-200 px-2 py-1 rounded text-blue-700 hover:bg-blue-100">Admin</button>
+            <button onClick={() => fillCredentials('citizen')} type="button" className="text-xs bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg text-slate-300 hover:bg-white/10 hover:text-white transition-all">Citizen</button>
+            <button onClick={() => fillCredentials('volunteer')} type="button" className="text-xs bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg text-slate-300 hover:bg-white/10 hover:text-white transition-all">Volunteer</button>
+            <button onClick={() => fillCredentials('admin')} type="button" className="text-xs bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg text-slate-300 hover:bg-white/10 hover:text-white transition-all">Admin</button>
           </div>
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
-              <p className="text-sm text-red-700">{error}</p>
+            <div className="bg-red-500/10 border-l-4 border-red-500 p-4 rounded-r-md">
+              <p className="text-sm text-red-400">{error}</p>
             </div>
           )}
           
-          <div className="-space-y-px rounded-md shadow-sm">
+          <div className="space-y-4">
             <div>
               <label htmlFor="email-address" className="sr-only">Email address</label>
               <input
@@ -83,8 +88,8 @@ const Login = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="relative block w-full rounded-t-md border-0 py-2.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                placeholder="Email address"
+                className="relative block w-full rounded-xl border-0 py-3 px-4 bg-white/5 text-white ring-1 ring-inset ring-white/10 placeholder:text-slate-500 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 transition-all"
+                placeholder="Secure ID (Email)"
               />
             </div>
             <div>
@@ -97,8 +102,8 @@ const Login = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="relative block w-full rounded-b-md border-0 py-2.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                placeholder="Password"
+                className="relative block w-full rounded-xl border-0 py-3 px-4 bg-white/5 text-white ring-1 ring-inset ring-white/10 placeholder:text-slate-500 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 transition-all"
+                placeholder="Clearance Code (Password)"
               />
             </div>
           </div>
@@ -107,12 +112,12 @@ const Login = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative flex w-full justify-center rounded-md bg-primary px-3 py-2.5 text-sm font-semibold text-white hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-70 transition-all"
+              className="group relative flex w-full justify-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50 transition-all shadow-[0_0_20px_-5px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_-5px_rgba(37,99,235,0.6)]"
             >
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                <LogIn className="h-5 w-5 text-blue-200 group-hover:text-blue-100" aria-hidden="true" />
+              <span className="absolute inset-y-0 left-0 flex items-center pl-4">
+                <LogIn className="h-5 w-5 text-blue-300 group-hover:text-white transition-colors" aria-hidden="true" />
               </span>
-              {isLoading ? 'Signing in...' : 'Sign in'}
+              {isLoading ? 'Authenticating...' : 'Establish Connection'}
             </button>
           </div>
         </form>

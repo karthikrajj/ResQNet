@@ -31,7 +31,7 @@ const PrivateRoute = ({ children, roles }) => {
 const AppContent = () => {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50 flex flex-col">
+      <div className="min-h-screen bg-[#0a0f1c] text-slate-200 flex flex-col font-sans">
         <Navbar />
         <div className="flex-1 overflow-auto">
           <Routes>
