@@ -1,7 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
-import { CheckCircle, MapPin, Phone, AlertCircle, Crosshair, Radar, Target } from 'lucide-react';
+import { CheckCircle, MapPin, Phone, AlertCircle, Crosshair, Radar, Target, MessageSquare, Send } from 'lucide-react';
+import { toast } from 'react-toastify';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+
+import L from 'leaflet';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+let DefaultIcon = L.icon({ iconUrl: icon, shadowUrl: iconShadow, iconAnchor: [12, 41] });
+L.Marker.prototype.options.icon = DefaultIcon;
 
 const VolunteerDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -9,6 +18,12 @@ const VolunteerDashboard = () => {
   const [myTasks, setMyTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [earnings, setEarnings] = useState(350.00);
+  const [chatMsg, setChatMsg] = useState({});
+
+  const playPing = () => {
+    const audio = new Audio('data:audio/mp3;base64,//NExAAAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
+    audio.play().catch(e => {}); 
+  };
 
   useEffect(() => {
     fetchData();
@@ -34,21 +49,33 @@ const VolunteerDashboard = () => {
     try {
       await axios.put(`/api/volunteer/requests/${id}/accept`, {}, { headers: { Authorization: `Bearer ${user.token}` } });
       setEarnings(prev => prev + 50);
-      alert('Signal accepted. Mission assigned. +$50 compensation added to your balance.');
+      toast.success('Mission assigned. +$50 compensation added.', { icon: '🚁' });
       fetchData();
     } catch (error) {
       console.error(error);
-      alert('Failed to accept mission');
+      toast.error('Failed to accept mission');
     }
   };
 
   const handleUpdateStatus = async (id, status) => {
     try {
       await axios.put(`/api/volunteer/requests/${id}/status`, { status }, { headers: { Authorization: `Bearer ${user.token}` } });
-      alert(`Status updated to: ${status}`);
+      toast.success(`Status updated to: ${status}`);
       fetchData();
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleSendChat = async (reqId) => {
+    const msg = chatMsg[reqId];
+    if(!msg) return;
+    try {
+      await axios.post(`/api/requests/${reqId}/chat`, { sender: 'Volunteer Unit', text: msg }, { headers: { Authorization: `Bearer ${user.token}` } });
+      setChatMsg(prev => ({ ...prev, [reqId]: '' }));
+      fetchData();
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -107,6 +134,33 @@ const VolunteerDashboard = () => {
                     <p className="mt-4 text-sm text-slate-400 bg-black/40 p-3 rounded-xl border border-white/5">{task.description}</p>
                   )}
                   
+                  {task.location?.lat && (
+                    <div className="mt-4 h-32 w-full rounded-xl overflow-hidden border border-white/10 z-0 relative">
+                      <MapContainer center={[task.location.lat, task.location.lng]} zoom={14} style={{ height: '100%', width: '100%' }} zoomControl={false} attributionControl={false}>
+                        <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+                        <Marker position={[task.location.lat, task.location.lng]} />
+                      </MapContainer>
+                    </div>
+                  )}
+
+                  {task.status !== 'Pending' && task.messages && (
+                    <div className="mt-4 bg-black/50 border border-white/5 rounded-xl p-3">
+                      <p className="text-xs text-slate-400 mb-2 font-semibold flex items-center gap-1"><MessageSquare className="w-3 h-3"/> Secure Comms Link</p>
+                      <div className="space-y-2 max-h-32 overflow-y-auto mb-2">
+                        {task.messages.map((m, idx) => (
+                          <div key={idx} className={`text-sm p-2 rounded-lg ${m.sender==='Volunteer Unit' ? 'bg-purple-500/20 text-purple-100 ml-auto w-fit' : 'bg-white/10 text-slate-200 mr-auto w-fit'}`}>
+                            <span className="text-[10px] opacity-50 block mb-0.5">{m.sender}</span>
+                            {m.text}
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <input type="text" value={chatMsg[task._id] || ''} onChange={e=>setChatMsg(p=>({...p, [task._id]: e.target.value}))} placeholder="Send message to citizen..." className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white outline-none focus:border-purple-500/50" />
+                        <button onClick={() => handleSendChat(task._id)} className="bg-purple-500 hover:bg-purple-600 text-white p-1.5 rounded-lg"><Send className="w-4 h-4"/></button>
+                      </div>
+                    </div>
+                  )}
+                  
                   {task.status !== 'Completed' && (
                     <div className="mt-5 flex gap-3">
                       <select 
@@ -159,7 +213,16 @@ const VolunteerDashboard = () => {
                     <MapPin className="h-4 w-4 text-red-400" /> {req.location?.address || 'COORDS: 37.80, -122.42'}
                   </p>
                   
-                  <p className="mt-3 text-sm text-slate-400 relative z-10">{req.description}</p>
+                  <p className="mt-3 text-sm text-slate-400 relative z-10">"{req.description}"</p>
+                  
+                  {req.location?.lat && (
+                    <div className="mt-4 h-24 w-full rounded-xl overflow-hidden border border-red-500/20 z-10 relative opacity-80 hover:opacity-100 transition-opacity">
+                      <MapContainer center={[req.location.lat, req.location.lng]} zoom={13} style={{ height: '100%', width: '100%' }} zoomControl={false} attributionControl={false}>
+                        <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+                        <Marker position={[req.location.lat, req.location.lng]} />
+                      </MapContainer>
+                    </div>
+                  )}
                   
                   <button 
                     onClick={() => handleAccept(req._id)}

@@ -34,10 +34,14 @@ const PrivateRoute = ({ children, roles }) => {
   return children;
 };
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const AppContent = () => {
   return (
     <Router>
       <div className="min-h-screen bg-[#0a0f1c] text-slate-200 flex flex-col font-sans">
+        <ToastContainer theme="dark" position="top-right" autoClose={4000} hideProgressBar={false} closeOnClick pauseOnHover />
         <Navbar />
         <div className="flex-1 overflow-auto">
           <Routes>

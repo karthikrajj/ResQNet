@@ -1,7 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
-import { AlertCircle, MapPin, Search, Activity, Wallet, Plus, HeartHandshake } from 'lucide-react';
+import { AlertCircle, MapPin, Search, Activity, Wallet, Plus, HeartHandshake, Navigation, MessageSquare, Send } from 'lucide-react';
+import { toast } from 'react-toastify';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+
+import L from 'leaflet';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+let DefaultIcon = L.icon({ iconUrl: icon, shadowUrl: iconShadow, iconAnchor: [12, 41] });
+L.Marker.prototype.options.icon = DefaultIcon;
 
 const CitizenDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -11,6 +20,12 @@ const CitizenDashboard = () => {
   const [sosDescription, setSosDescription] = useState('');
   const [message, setMessage] = useState('');
   const [balance, setBalance] = useState(1250.50);
+  const [chatMsg, setChatMsg] = useState('');
+
+  const playPing = () => {
+    const audio = new Audio('data:audio/mp3;base64,//NExAAAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
+    audio.play().catch(e => {}); 
+  };
 
   useEffect(() => {
     fetchRequests();
@@ -31,26 +46,37 @@ const CitizenDashboard = () => {
 
   const handleSOS = async (e) => {
     e.preventDefault();
-    setMessage('');
     try {
-      const location = { lat: 37.77, lng: -122.41, address: 'Current Location' };
+      const location = { lat: 37.77 + (Math.random() - 0.5)*0.1, lng: -122.41 + (Math.random() - 0.5)*0.1, address: 'Current Location' };
       await axios.post('/api/citizen/sos', { type: sosType, description: sosDescription, location, priority: 'High' }, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
-      setMessage('SOS broadcasted to nearby units.');
+      toast.success('SOS broadcasted to nearby units.', { icon: '🚨' });
+      playPing();
       setSosDescription('');
       fetchRequests();
     } catch (error) {
-      setMessage('Broadcast failed.');
+      toast.error('Broadcast failed.');
     }
   };
 
   const handleDonate = () => {
     if (balance >= 100) {
       setBalance(prev => prev - 100);
-      alert('Successfully donated $100 to the global rescue fund!');
+      toast.success('Successfully donated $100 to the global rescue fund!');
     } else {
-      alert('Insufficient funds for this addon.');
+      toast.error('Insufficient funds for this addon.');
+    }
+  };
+
+  const handleSendChat = async (reqId) => {
+    if(!chatMsg) return;
+    try {
+      await axios.post(`/api/requests/${reqId}/chat`, { sender: 'Citizen', text: chatMsg }, { headers: { Authorization: `Bearer ${user.token}` } });
+      setChatMsg('');
+      fetchRequests();
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -164,15 +190,48 @@ const CitizenDashboard = () => {
                             'bg-white/10 text-slate-300 border border-white/20'}`}>
                           {req.status}
                         </span>
-                        <span className="font-semibold text-white text-lg">{req.type}</span>
+                        {req.status === 'Assigned' && (
+                          <span className="text-xs text-blue-400 font-mono flex items-center gap-1">
+                            <Navigation className="w-3 h-3" /> ETA 12 mins
+                          </span>
+                        )}
                       </div>
-                      <p className="text-sm text-slate-400 mt-2">{req.description || 'No description provided'}</p>
-                      <p className="text-xs font-mono text-slate-500 mt-3 flex items-center gap-1.5">
-                        <MapPin className="h-3.5 w-3.5 text-blue-400" /> {req.location?.address || 'COORDS: 37.77, -122.41'}
+                      <h3 className="font-bold text-white text-lg mt-2">{req.type}</h3>
+                      <p className="text-sm text-slate-300 mt-1 flex items-center gap-2 font-mono">
+                        <MapPin className="h-4 w-4 text-purple-400" /> {req.location?.address}
                       </p>
+                      
+                      {req.location?.lat && (
+                        <div className="mt-4 h-32 w-full max-w-sm rounded-xl overflow-hidden border border-white/10 z-0 relative">
+                          <MapContainer center={[req.location.lat, req.location.lng]} zoom={13} style={{ height: '100%', width: '100%' }} zoomControl={false} attributionControl={false}>
+                            <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+                            <Marker position={[req.location.lat, req.location.lng]} />
+                          </MapContainer>
+                        </div>
+                      )}
+
+                      <p className="mt-4 text-sm text-slate-400 italic">"{req.description}"</p>
+
+                      {req.status !== 'Pending' && req.messages && (
+                        <div className="mt-4 bg-black/50 border border-white/5 rounded-xl p-3 max-w-sm">
+                          <p className="text-xs text-slate-400 mb-2 font-semibold flex items-center gap-1"><MessageSquare className="w-3 h-3"/> Secure Comms</p>
+                          <div className="space-y-2 max-h-32 overflow-y-auto mb-2">
+                            {req.messages.map((m, i) => (
+                              <div key={i} className={`text-sm p-2 rounded-lg ${m.sender==='Citizen' ? 'bg-blue-500/20 text-blue-100 ml-auto w-fit' : 'bg-white/10 text-slate-200 mr-auto w-fit'}`}>
+                                <span className="text-[10px] opacity-50 block mb-0.5">{m.sender}</span>
+                                {m.text}
+                              </div>
+                            ))}
+                          </div>
+                          <div className="flex gap-2">
+                            <input type="text" value={chatMsg} onChange={e=>setChatMsg(e.target.value)} placeholder="Send message..." className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white outline-none" />
+                            <button onClick={() => handleSendChat(req._id)} className="bg-blue-500 hover:bg-blue-600 text-white p-1.5 rounded-lg"><Send className="w-4 h-4"/></button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                     {req.volunteer && (
-                      <div className="bg-blue-900/20 p-4 rounded-xl border border-blue-500/20 text-sm text-center sm:text-right min-w-[150px]">
+                      <div className="bg-blue-900/20 p-4 rounded-xl border border-blue-500/20 text-sm text-center sm:text-right min-w-[150px] h-fit">
                         <p className="text-[10px] uppercase font-bold tracking-wider text-blue-400 mb-1">Dispatched Unit</p>
                         <p className="font-semibold text-white">{req.volunteer.name}</p>
                         <p className="text-slate-400 font-mono mt-1 text-xs">{req.volunteer.phone}</p>

@@ -5,8 +5,8 @@ const getInitialRequests = () => {
   if (saved) return JSON.parse(saved);
   
   const initial = [
-    { _id: 'r1', type: 'Medical', location: { address: 'COORDS: 37.77, -122.41' }, description: 'Need immediate medical assistance', status: 'Pending', priority: 'High', citizen: { name: 'Alice', phone: '555-0101' }, createdAt: new Date().toISOString() },
-    { _id: 'r2', type: 'Rescue', location: { address: 'COORDS: 37.80, -122.42' }, description: 'Flood rescue required', status: 'Assigned', priority: 'Critical', citizen: { name: 'Bob', phone: '555-0202' }, volunteer: { name: 'Demo Volunteer', phone: '555-0303' }, createdAt: new Date(Date.now() - 3600000).toISOString() }
+    { _id: 'r1', type: 'Medical', location: { address: 'COORDS: 37.77, -122.41', lat: 37.7749, lng: -122.4194 }, description: 'Need immediate medical assistance', status: 'Pending', priority: 'High', citizen: { name: 'Alice', phone: '555-0101' }, messages: [], createdAt: new Date().toISOString() },
+    { _id: 'r2', type: 'Rescue', location: { address: 'COORDS: 37.80, -122.42', lat: 37.8044, lng: -122.4221 }, description: 'Flood rescue required', status: 'Assigned', priority: 'Critical', citizen: { name: 'Bob', phone: '555-0202' }, volunteer: { name: 'Demo Volunteer', phone: '555-0303' }, messages: [{ sender: 'Volunteer', text: 'Im en route. Stay put.' }], createdAt: new Date(Date.now() - 3600000).toISOString() }
   ];
   localStorage.setItem('resqnet_requests', JSON.stringify(initial));
   return initial;
@@ -103,6 +103,18 @@ export const setupMockAdapter = () => {
               localStorage.setItem('resqnet_requests', JSON.stringify(requests));
             }
             data = { message: 'Updated' };
+          }
+          else if (url.includes('/api/requests/') && url.includes('/chat')) {
+            const id = url.split('/')[3];
+            const body = typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
+            const requests = getInitialRequests();
+            const req = requests.find(r => r._id === id);
+            if (req) {
+              if (!req.messages) req.messages = [];
+              req.messages.push({ sender: body.sender, text: body.text });
+              localStorage.setItem('resqnet_requests', JSON.stringify(requests));
+            }
+            data = req;
           }
           
           // --- ADMIN ROUTES ---
