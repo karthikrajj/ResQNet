@@ -236,6 +236,30 @@ const VolunteerDashboard = () => {
               ))}
             </div>
           )}
+
+          {/* CCTV Feed Mock */}
+          <div className="mt-8 bg-white/5 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-white/10 overflow-hidden relative group">
+            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+              <Crosshair className="h-5 w-5 text-red-400" />
+              Live Sector Optics
+            </h2>
+            <div className="grid grid-cols-2 gap-2 relative">
+              <div className="absolute inset-0 bg-blue-500/10 pointer-events-none animate-scanline z-10"></div>
+              
+              <div className="h-32 bg-black rounded-lg border border-white/10 relative overflow-hidden group-hover:border-blue-500/50 transition-colors">
+                 <div className="absolute top-2 left-2 flex items-center gap-2 z-20"><div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div><span className="text-[10px] text-white font-mono bg-black/50 px-1 rounded">CAM-01 (DOWNTOWN)</span></div>
+                 <img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=400&q=80" alt="city" className="w-full h-full object-cover opacity-50 grayscale contrast-125" />
+                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none"></div>
+              </div>
+
+              <div className="h-32 bg-black rounded-lg border border-white/10 relative overflow-hidden group-hover:border-blue-500/50 transition-colors">
+                 <div className="absolute top-2 left-2 flex items-center gap-2 z-20"><div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div><span className="text-[10px] text-white font-mono bg-black/50 px-1 rounded">CAM-04 (HIGHWAY)</span></div>
+                 <img src="https://images.unsplash.com/photo-1517594422361-5eeb8ae275a9?auto=format&fit=crop&w=400&q=80" alt="highway" className="w-full h-full object-cover opacity-50 grayscale contrast-125" />
+                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none"></div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
       </div>
