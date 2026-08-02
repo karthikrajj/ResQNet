@@ -10,13 +10,8 @@ import VolunteerDashboard from './pages/VolunteerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import Navbar from './components/Navbar';
 
-import { setupMockAdapter } from './mockApi';
-
-// Set standard base URL (ignored by mock adapter)
-axios.defaults.baseURL = 'http://localhost:5000';
-
-// Setup Mock Adapter for Vercel Demo
-setupMockAdapter();
+// Real Backend URL will be set here dynamically
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'https://backend-5o9504zgw-hawkeye2.vercel.app';
 
 const PrivateRoute = ({ children, roles }) => {
   const { user, loading } = useContext(AuthContext);
