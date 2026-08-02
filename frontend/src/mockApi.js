@@ -102,9 +102,9 @@ export const setupMockAdapter = () => {
             data = getInitialRequests();
           }
           
-          // --- VOLUNTEER ACTIONS ---
           else if (url.includes('/api/volunteer/requests/') && url.includes('/accept')) {
-            const id = url.split('/')[4];
+            const match = url.match(/\/requests\/([^/]+)\/accept/);
+            const id = match ? match[1] : null;
             const requests = getInitialRequests();
             const req = requests.find(r => r._id === id);
             if (req) {
@@ -115,7 +115,8 @@ export const setupMockAdapter = () => {
             data = { message: 'Accepted' };
           }
           else if (url.includes('/api/volunteer/requests/') && url.includes('/status')) {
-            const id = url.split('/')[4];
+            const match = url.match(/\/requests\/([^/]+)\/status/);
+            const id = match ? match[1] : null;
             const body = typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
             const requests = getInitialRequests();
             const req = requests.find(r => r._id === id);
@@ -126,7 +127,8 @@ export const setupMockAdapter = () => {
             data = { message: 'Updated' };
           }
           else if (url.includes('/api/requests/') && url.includes('/chat')) {
-            const id = url.split('/')[3];
+            const match = url.match(/\/requests\/([^/]+)\/chat/);
+            const id = match ? match[1] : null;
             const body = typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
             const requests = getInitialRequests();
             const req = requests.find(r => r._id === id);
