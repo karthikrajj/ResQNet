@@ -46,17 +46,40 @@ const CitizenDashboard = () => {
 
   const handleSOS = async (e) => {
     e.preventDefault();
-    try {
-      const location = { lat: 37.77 + (Math.random() - 0.5)*0.1, lng: -122.41 + (Math.random() - 0.5)*0.1, address: 'Current Location' };
-      await axios.post('/api/citizen/sos', { type: sosType, description: sosDescription, location, priority: 'High' }, {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
-      toast.success('SOS broadcasted to nearby units.', { icon: '🚨' });
-      playPing();
-      setSosDescription('');
-      fetchRequests();
-    } catch (error) {
-      toast.error('Broadcast failed.');
+    
+    // Function to process SOS with given coordinates
+    const processSOS = async (lat, lng, address) => {
+      try {
+        const location = { lat, lng, address };
+        await axios.post('/api/citizen/sos', { type: sosType, description: sosDescription, location, priority: 'High' }, {
+          headers: { Authorization: `Bearer ${user.token}` }
+        });
+        toast.success('SOS broadcasted to nearby units.', { icon: '🚨' });
+        playPing();
+        setSosDescription('');
+        fetchRequests();
+      } catch (error) {
+        toast.error('Broadcast failed.');
+      }
+    };
+
+    // Try to get real physical location
+    if (navigator.geolocation) {
+      toast.info('Acquiring live GPS satellite lock...', { autoClose: 2000 });
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          processSOS(position.coords.latitude, position.coords.longitude, 'Live GPS Coordinates');
+        },
+        (error) => {
+          console.warn('Geolocation blocked or failed. Using tactical fallback coordinates.', error);
+          // Fallback to random tactical coordinates if user denies location
+          processSOS(37.77 + (Math.random() - 0.5)*0.1, -122.41 + (Math.random() - 0.5)*0.1, 'Tactical Fallback Coordinates');
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      );
+    } else {
+      // Fallback if browser doesn't support geolocation
+      processSOS(37.77 + (Math.random() - 0.5)*0.1, -122.41 + (Math.random() - 0.5)*0.1, 'Tactical Fallback Coordinates');
     }
   };
 
