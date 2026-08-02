@@ -52,8 +52,11 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in-up">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+    <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in-up overflow-hidden">
+      {/* Background Pan Grid */}
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03] animate-pan" style={{ backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+
+      <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <h1 className="text-3xl font-extrabold text-white tracking-tight">Global <span className="text-emerald-400">Command</span></h1>
           <p className="text-slate-400 text-sm mt-1">Admin Overwatch Terminal</p>
@@ -67,51 +70,51 @@ const AdminDashboard = () => {
       </div>
 
       {/* Telemetry Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-all hover:scale-105 hover:shadow-[0_0_25px_-5px_rgba(248,113,113,0.3)] hover:border-red-500/30 animate-fade-in-up group" style={{ animationDelay: '100ms' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Critical Incidents</p>
-              <p className="text-4xl font-light text-red-400 font-mono">{stats.summary.activeEmergencies}</p>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1 group-hover:text-red-300 transition-colors">Critical Incidents</p>
+              <p className="text-4xl font-light text-red-400 font-mono group-hover:animate-glitch">{stats.summary.activeEmergencies}</p>
             </div>
-            <div className="p-4 bg-red-500/10 rounded-2xl border border-red-500/20 text-red-400"><AlertTriangle className="w-6 h-6 animate-pulse" /></div>
+            <div className="p-4 bg-red-500/10 rounded-2xl border border-red-500/20 text-red-400"><AlertTriangle className="w-6 h-6 animate-heartbeat" /></div>
           </div>
         </div>
         
-        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-all hover:scale-105 hover:shadow-[0_0_25px_-5px_rgba(168,85,247,0.3)] hover:border-purple-500/30 animate-fade-in-up group" style={{ animationDelay: '200ms' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Active Units</p>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1 group-hover:text-purple-300 transition-colors">Active Units</p>
               <p className="text-4xl font-light text-purple-400 font-mono">{stats.summary.totalVolunteers}</p>
             </div>
-            <div className="p-4 bg-purple-500/10 rounded-2xl border border-purple-500/20 text-purple-400"><Target className="w-6 h-6" /></div>
+            <div className="p-4 bg-purple-500/10 rounded-2xl border border-purple-500/20 text-purple-400"><Target className="w-6 h-6 group-hover:animate-pulse-glow" /></div>
           </div>
         </div>
         
-        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors animate-fade-in-up" style={{ animationDelay: '300ms' }}>
+        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-all hover:scale-105 hover:shadow-[0_0_25px_-5px_rgba(96,165,250,0.3)] hover:border-blue-500/30 animate-fade-in-up group" style={{ animationDelay: '300ms' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Civilian Nodes</p>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1 group-hover:text-blue-300 transition-colors">Civilian Nodes</p>
               <p className="text-4xl font-light text-blue-400 font-mono">{stats.summary.totalCitizens}</p>
             </div>
-            <div className="p-4 bg-blue-500/10 rounded-2xl border border-blue-500/20 text-blue-400"><Users className="w-6 h-6" /></div>
+            <div className="p-4 bg-blue-500/10 rounded-2xl border border-blue-500/20 text-blue-400"><Users className="w-6 h-6 group-hover:animate-pulse-glow" /></div>
           </div>
         </div>
 
-        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-all hover:scale-105 hover:shadow-[0_0_25px_-5px_rgba(52,211,153,0.3)] hover:border-emerald-500/30 animate-fade-in-up group" style={{ animationDelay: '400ms' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Secure Havens</p>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1 group-hover:text-emerald-300 transition-colors">Secure Havens</p>
               <p className="text-4xl font-light text-emerald-400 font-mono">{stats.summary.totalShelters}</p>
             </div>
-            <div className="p-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 text-emerald-400"><CheckCircle className="w-6 h-6" /></div>
+            <div className="p-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 text-emerald-400"><CheckCircle className="w-6 h-6 group-hover:animate-pulse-glow" /></div>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Telemetry Chart */}
-        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 lg:col-span-1 flex flex-col">
+        <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 lg:col-span-1 flex flex-col hover:border-blue-500/30 transition-all hover:shadow-[0_0_30px_-5px_rgba(59,130,246,0.2)]">
           <h2 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
             <Activity className="w-5 h-5 text-blue-400" />
             Global Resolution Matrix
