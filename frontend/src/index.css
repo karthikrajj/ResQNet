@@ -20,6 +20,12 @@
   --animate-gradient-x: gradientX 15s ease infinite;
   --animate-typewriter: typewriter 2s steps(40) forwards;
   --animate-ping-slow: pingSlow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-marquee: marquee 25s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
 }
 
 @keyframes radarSpin {

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { AlertCircle, MapPin, Search, Activity, Wallet, Plus, HeartHandshake, Navigation, MessageSquare, Send } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, WMSTileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
 import L from 'leaflet';
@@ -120,8 +120,28 @@ const CitizenDashboard = () => {
     }
   };
 
+  const [droneActive, setDroneActive] = useState(false);
+
+  const handleRequestAid = () => {
+    toast.info('Initiating automated drone dispatch for supplies...', { icon: '🚁' });
+    setDroneActive(true);
+    setTimeout(() => {
+      setDroneActive(false);
+      toast.success('Supplies delivered successfully.', { icon: '📦' });
+    }, 4000);
+  };
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in-up">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in-up relative">
+      {/* Drone Animation Overlay */}
+      {droneActive && (
+        <div className="fixed inset-0 pointer-events-none z-[100] flex items-center justify-center overflow-hidden">
+          <div className="absolute left-[-100px] top-[20%] text-6xl animate-marquee" style={{ animationDuration: '4s', animationTimingFunction: 'linear' }}>
+            🚁<span className="text-sm font-mono text-blue-400 absolute -bottom-4 left-0">ResQ-Drone-07</span>
+          </div>
+        </div>
+      )}
+      
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-extrabold text-white tracking-tight">Citizen <span className="text-blue-400">Node</span></h1>
         <div className="flex items-center gap-4">
@@ -196,7 +216,7 @@ const CitizenDashboard = () => {
               <button onClick={handleDonate} className="bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-300 py-2.5 rounded-xl text-sm font-semibold transition-all">
                 Donate $100
               </button>
-              <button className="bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 py-2.5 rounded-xl text-sm font-semibold transition-all">
+              <button onClick={handleRequestAid} className="bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 py-2.5 rounded-xl text-sm font-semibold transition-all">
                 Request Aid
               </button>
             </div>
@@ -245,6 +265,13 @@ const CitizenDashboard = () => {
                         <div className="mt-4 h-32 w-full max-w-sm rounded-xl overflow-hidden border border-white/10 z-0 relative">
                           <MapContainer center={[req.location.lat, req.location.lng]} zoom={13} style={{ height: '100%', width: '100%' }} zoomControl={false} attributionControl={false}>
                             <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+                            <WMSTileLayer
+                              url="https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi"
+                              layers="nexrad-n0r-900913"
+                              format="image/png"
+                              transparent={true}
+                              opacity={0.6}
+                            />
                             <Marker position={[req.location.lat, req.location.lng]} />
                           </MapContainer>
                         </div>

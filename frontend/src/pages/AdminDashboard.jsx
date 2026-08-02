@@ -179,6 +179,20 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
+      <div className="mt-8 bg-black/40 border-t border-b border-white/10 p-2 overflow-hidden flex items-center gap-4 animate-fade-in-up" style={{ animationDelay: '500ms' }}>
+        <div className="bg-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap border border-red-500/30 uppercase tracking-widest animate-pulse-glow">
+          LIVE FEED
+        </div>
+        <div className="flex-1 overflow-hidden relative h-6">
+          <div className="absolute whitespace-nowrap animate-marquee text-sm font-mono text-emerald-400">
+            [12:05:32] BREAKING: Unit Alpha-1 assigned to Medical Evac in Sector 4 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
+            [12:05:45] WARNING: Supply levels dropping below 20% in Shelter Delta &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
+            [12:06:12] SUCCESS: Flood rescue completed at LAT: 37.80, LNG: -122.42 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
+            [12:06:58] INCOMING: High priority SOS detected from unknown civilian node...
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 };

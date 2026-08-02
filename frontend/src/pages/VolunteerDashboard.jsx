@@ -3,7 +3,7 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { CheckCircle, MapPin, Phone, AlertCircle, Crosshair, Radar, Target, MessageSquare, Send } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, WMSTileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
 import L from 'leaflet';
@@ -138,6 +138,7 @@ const VolunteerDashboard = () => {
                     <div className="mt-4 h-32 w-full rounded-xl overflow-hidden border border-white/10 z-0 relative">
                       <MapContainer center={[task.location.lat, task.location.lng]} zoom={14} style={{ height: '100%', width: '100%' }} zoomControl={false} attributionControl={false}>
                         <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+                        <WMSTileLayer url="https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi" layers="nexrad-n0r-900913" format="image/png" transparent={true} opacity={0.6} />
                         <Marker position={[task.location.lat, task.location.lng]} />
                       </MapContainer>
                     </div>
@@ -219,6 +220,7 @@ const VolunteerDashboard = () => {
                     <div className="mt-4 h-24 w-full rounded-xl overflow-hidden border border-red-500/20 z-10 relative opacity-80 hover:opacity-100 transition-opacity">
                       <MapContainer center={[req.location.lat, req.location.lng]} zoom={13} style={{ height: '100%', width: '100%' }} zoomControl={false} attributionControl={false}>
                         <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+                        <WMSTileLayer url="https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi" layers="nexrad-n0r-900913" format="image/png" transparent={true} opacity={0.6} />
                         <Marker position={[req.location.lat, req.location.lng]} />
                       </MapContainer>
                     </div>
