@@ -30,13 +30,25 @@ const VolunteerDashboard = () => {
   };
 
   const handleAccept = async (id) => {
-    setEarnings(prev => prev + 50);
-    alert('Signal accepted. Mission assigned. +$50 compensation added to your balance.');
-    fetchData();
+    try {
+      await axios.put(`/api/volunteer/requests/${id}/accept`, {}, { headers: { Authorization: `Bearer ${user.token}` } });
+      setEarnings(prev => prev + 50);
+      alert('Signal accepted. Mission assigned. +$50 compensation added to your balance.');
+      fetchData();
+    } catch (error) {
+      console.error(error);
+      alert('Failed to accept mission');
+    }
   };
 
   const handleUpdateStatus = async (id, status) => {
-    alert(`Status updated to: ${status}`);
+    try {
+      await axios.put(`/api/volunteer/requests/${id}/status`, { status }, { headers: { Authorization: `Bearer ${user.token}` } });
+      alert(`Status updated to: ${status}`);
+      fetchData();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
