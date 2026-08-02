@@ -20,8 +20,9 @@ const VolunteerDashboard = () => {
         axios.get('/api/volunteer/requests', { headers: { Authorization: `Bearer ${user.token}` } }),
         axios.get('/api/citizen/requests', { headers: { Authorization: `Bearer ${user.token}` } }) // Reusing mock endpoints
       ]);
-      setPendingRequests(pendingRes.data);
-      setMyTasks(tasksRes.data); // Mocking active tasks using same array
+      const allRequests = pendingRes.data;
+      setPendingRequests(allRequests.filter(r => r.status === 'Pending'));
+      setMyTasks(allRequests.filter(r => r.status !== 'Pending'));
     } catch (error) {
       console.error(error);
     } finally {
