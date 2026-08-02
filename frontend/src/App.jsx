@@ -10,7 +10,13 @@ import VolunteerDashboard from './pages/VolunteerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import Navbar from './components/Navbar';
 
+import { setupMockAdapter } from './mockApi';
+
+// Set standard base URL (ignored by mock adapter)
 axios.defaults.baseURL = 'http://localhost:5000';
+
+// Setup Mock Adapter for Vercel Demo
+setupMockAdapter();
 
 const PrivateRoute = ({ children, roles }) => {
   const { user, loading } = useContext(AuthContext);
