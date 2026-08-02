@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
 
 // Routes
 const authRoutes = require('./routes/authRoutes');
@@ -14,7 +13,10 @@ const seedDatabase = require('./scripts/seed');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors({
+  origin: '*', // Allow all origins for Vercel deployment compatibility
+  credentials: true
+}));
 app.use(express.json());
 
 // API Routes
@@ -26,37 +28,47 @@ app.use('/api/admin', adminRoutes);
 // Health check
 app.get('/api/health', (req, res) => res.status(200).json({ status: 'OK' }));
 
-// Start server and connect to In-Memory DB
-let mongoServer;
+// Global MongoDB connection instance for Serverless reuse
+let isConnected = false;
 
-const startServer = async () => {
+const connectDB = async () => {
+  if (isConnected) {
+    console.log('Using existing MongoDB connection');
+    return;
+  }
+
+  const mongoUri = process.env.MONGO_URI;
+  
+  if (!mongoUri) {
+    console.warn('WARNING: MONGO_URI environment variable is missing.');
+    console.warn('Falling back to localhost MongoDB. This will fail on Vercel!');
+  }
+
   try {
-    mongoServer = await MongoMemoryServer.create();
-    const mongoUri = mongoServer.getUri();
+    const db = await mongoose.connect(mongoUri || 'mongodb://localhost:27017/resqnet');
+    isConnected = db.connections[0].readyState;
+    console.log('MongoDB successfully connected');
     
-    await mongoose.connect(mongoUri);
-    console.log('MongoDB successfully connected to in-memory instance');
-    
-    // Seed the database with initial dummy data
-    await seedDatabase();
-
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
+    // Auto-seed if required
+    if (process.env.SEED_DB === 'true') {
+      await seedDatabase();
+    }
   } catch (error) {
-    console.error('Error starting server:', error);
-    process.exit(1);
+    console.error('MongoDB connection error:', error);
   }
 };
 
-startServer();
+// If running locally as a standalone server
+if (require.main === module) {
+  connectDB().then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  });
+}
 
-// Handle graceful shutdown
-process.on('SIGINT', async () => {
-  if (mongoServer) {
-    await mongoose.disconnect();
-    await mongoServer.stop();
-    console.log('MongoDB in-memory instance stopped');
-  }
-  process.exit(0);
-});
+// Export for Vercel Serverless Function
+module.exports = async (req, res) => {
+  await connectDB();
+  return app(req, res);
+};
