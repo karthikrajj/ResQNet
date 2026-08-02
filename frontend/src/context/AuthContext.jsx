@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userInfo = localStorage.getItem('userInfo');
+    const userInfo = sessionStorage.getItem('userInfo');
     if (userInfo) {
       setUser(JSON.parse(userInfo));
     }
@@ -18,20 +18,21 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     const { data } = await axios.post('/api/auth/login', { email, password });
     setUser(data);
-    localStorage.setItem('userInfo', JSON.stringify(data));
+    sessionStorage.setItem('userInfo', JSON.stringify(data));
     return data;
   };
 
   const register = async (userData) => {
     const { data } = await axios.post('/api/auth/register', userData);
     setUser(data);
-    localStorage.setItem('userInfo', JSON.stringify(data));
+    sessionStorage.setItem('userInfo', JSON.stringify(data));
     return data;
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('userInfo');
+    sessionStorage.removeItem('userInfo');
+    localStorage.removeItem('userInfo'); // Clean up old local storage just in case
   };
 
   return (
